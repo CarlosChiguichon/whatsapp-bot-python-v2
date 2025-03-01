@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 import logging
 from app.utils.whatsapp_utils import process_whatsapp_message, is_valid_whatsapp_message
-from app.decorators.security import signature_required
 
 # Crear un blueprint para las rutas
 webhook_blueprint = Blueprint('webhook', __name__)
@@ -30,19 +29,6 @@ def webhook():
             return "Verification token mismatch", 403
 
     # Maneja los mensajes entrantes de WhatsApp (POST)
-    # Nota: No aplicamos signature_required directamente en la ruta para permitir la verificación GET
-    # pero lo aplicamos manualmente para solicitudes POST
-    
-    # Verificar firma para solicitudes POST en producción
-    if current_app.config.get("FLASK_ENV") != "development":
-        from app.decorators.security import validate_signature
-        signature = request.headers.get("X-Hub-Signature-256", "")[7:]  # Removing 'sha256='
-        
-        if not signature or not validate_signature(request.data.decode("utf-8"), signature):
-            logger.warning("Signature verification failed!")
-            return jsonify({"status": "error", "message": "Invalid signature"}), 403
-
-    # Continuar con el procesamiento normal
     data = request.get_json()
     
     if not data:
