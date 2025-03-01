@@ -28,7 +28,7 @@ def load_configurations(app):
     app.config["SESSION_WARNING_TIME"] = int(os.getenv("SESSION_WARNING_TIME", "300"))  # 5 minutos por defecto
     app.config["SESSIONS_FILE_PATH"] = os.getenv("SESSIONS_FILE_PATH", "sessions.json")
     
-    # Configuración de seguridad
+        # Configuración de seguridad
     app.config["APP_SECRET"] = os.getenv("APP_SECRET")
     app.config["FLASK_ENV"] = os.getenv("FLASK_ENV", "production")  # Por defecto producción
 
