@@ -236,7 +236,7 @@ class SessionManager:
         """
         try:
             # Intentar obtener ruta del archivo de configuración
-            filepath = "sessions.json"
+            filepath = current_app.config.get("SESSIONS_FILE_PATH", "sessions.json")
             self.save_sessions(filepath)
         except Exception as e:
             # Usar ruta por defecto si hay error
