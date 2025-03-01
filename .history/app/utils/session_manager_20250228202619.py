@@ -3,6 +3,7 @@ import threading
 import json
 import logging
 from datetime import datetime, timedelta
+from flask import current_app
 
 # Inicializar el logger
 logger = logging.getLogger(__name__)
@@ -234,28 +235,13 @@ class SessionManager:
         Guarda automáticamente las sesiones al archivo configurado.
         """
         try:
-            # Usar una ruta predeterminada segura
+            # Intentar obtener ruta del archivo de configuración
             filepath = "sessions.json"
-            
-            # Intentar obtener la ruta del archivo desde la configuración global
-            # solo si está disponible
-            try:
-                from flask import current_app
-                # Verificar que estamos en un contexto de aplicación
-                if current_app:
-                    filepath = current_app.config.get("SESSIONS_FILE_PATH", filepath)
-            except (ImportError, RuntimeError):
-                # Si no hay contexto de aplicación, usar el valor predeterminado
-                logger.warning("Error getting sessions file path from config, using default")
-            
             self.save_sessions(filepath)
         except Exception as e:
-            logger.error(f"Error auto-saving sessions: {str(e)}")
-            # Intentar guardar en una ubicación predeterminada
-            try:
-                self.save_sessions("sessions.json")
-            except Exception:
-                pass
+            # Usar ruta por defecto si hay error
+            logger.warning(f"Error getting sessions file path from config: {str(e)}")
+            self.save_sessions("sessions.json")
     
     def _send_inactivity_warning(self, user_id):
         """
