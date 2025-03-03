@@ -1,0 +1,28 @@
+# Entorno y configuración
+.env
+.env.*
+venv/
+env/
+.vscode/
+.idea/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# Logs
+logs/
+*.log
+
+# Archivos temporales
+tmp/
+temp/
+
+# Archivos generados
+dist/
+build/
